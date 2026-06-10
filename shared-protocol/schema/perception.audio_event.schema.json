@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.audio_event.schema.json",
+  "title": "perception.audio_event payload",
+  "description": "PROTOCOL.md §8.4 — a detected ambient sound event (doorbell, alarm, name…).",
+  "type": "object",
+  "required": ["label"],
+  "properties": {
+    "label": { "type": "string", "minLength": 1 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "ts": { "type": "integer", "minimum": 0 },
+    "loudness_db": { "type": "number" }
+  }
+}

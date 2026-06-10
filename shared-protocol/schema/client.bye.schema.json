@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.bye.schema.json",
+  "title": "client.bye payload",
+  "description": "PROTOCOL.md §3 — graceful disconnect. Payload may be {}.",
+  "type": "object",
+  "properties": {
+    "reason": { "type": "string" }
+  }
+}

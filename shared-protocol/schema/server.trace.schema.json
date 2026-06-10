@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/server.trace.schema.json",
+  "title": "server.trace payload",
+  "description": "PROTOCOL.md §10.1 — the full ordered trace for a turn (reply to client.trace_get). v1.3.",
+  "type": "object",
+  "required": ["plan_id", "entries"],
+  "properties": {
+    "plan_id": { "type": "string" },
+    "goal": { "type": "string" },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "role"],
+        "properties": {
+          "agent_id": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 },
+          "parent": { "type": ["string", "null"] },
+          "level": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "role", "kind"],
+        "properties": {
+          "plan_id": { "type": "string" },
+          "seq": { "type": "integer", "minimum": 0 },
+          "ts": { "type": "integer", "minimum": 0 },
+          "agent_id": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 },
+          "parent": { "type": ["string", "null"] },
+          "level": { "type": "integer", "minimum": 0 },
+          "kind": { "type": "string" },
+          "label": { "type": "string" },
+          "skill": { "type": "string" },
+          "tool": { "type": "string" },
+          "detail": { "type": "string" },
+          "duration_ms": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.state.schema.json",
+  "title": "perception.state payload",
+  "description": "PROTOCOL.md §8.4 — which perception streams are active + thermal/battery.",
+  "type": "object",
+  "properties": {
+    "vision": {
+      "type": "object",
+      "required": ["active"],
+      "properties": {
+        "active": { "type": "boolean" },
+        "fps": { "type": "number", "minimum": 0 },
+        "resolution": { "type": "string" },
+        "camera": { "$ref": "common.schema.json#/$defs/camera" }
+      }
+    },
+    "ambient_audio": {
+      "type": "object",
+      "required": ["active"],
+      "properties": { "active": { "type": "boolean" } }
+    },
+    "gaze": {
+      "type": "object",
+      "required": ["active"],
+      "properties": { "active": { "type": "boolean" } }
+    },
+    "thermal": { "$ref": "common.schema.json#/$defs/thermal" },
+    "battery": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

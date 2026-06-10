@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.scene_objects.schema.json",
+  "title": "perception.scene_objects payload",
+  "description": "PROTOCOL.md §8.4 — client-side detected objects with 3D positions (optional).",
+  "type": "object",
+  "required": ["objects"],
+  "properties": {
+    "frame_id": { "type": "string" },
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "bbox": { "$ref": "common.schema.json#/$defs/bbox" },
+          "position": { "$ref": "common.schema.json#/$defs/vec3" },
+          "anchor": { "$ref": "common.schema.json#/$defs/anchor" }
+        }
+      }
+    }
+  }
+}

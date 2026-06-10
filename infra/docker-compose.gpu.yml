@@ -1,0 +1,16 @@
+# Opt-in GPU override for voice-service (STT/TTS acceleration).
+# Layer it on top of the base file; requires the NVIDIA Container Toolkit:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
+#
+# This merges a GPU reservation into the existing voice-service definition.
+
+services:
+  voice-service:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: ["gpu"]

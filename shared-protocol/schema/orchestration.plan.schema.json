@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/orchestration.plan.schema.json",
+  "title": "orchestration.plan payload",
+  "description": "PROTOCOL.md §9.2 — the agent team & plan Jarvis built for a goal (agents + edges). v1.2, additive.",
+  "type": "object",
+  "required": ["plan_id", "goal", "agents"],
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 },
+    "goal": { "type": "string" },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "role", "level"],
+        "properties": {
+          "agent_id": {
+            "description": "Stable within a plan_id; sub-agents use dotted ids (a1.1).",
+            "type": "string",
+            "minLength": 1
+          },
+          "role": { "type": "string", "minLength": 1 },
+          "name": { "type": "string" },
+          "parent": {
+            "description": "Parent agent_id; null for the L0 orchestrator.",
+            "type": ["string", "null"]
+          },
+          "level": { "type": "integer", "minimum": 0 },
+          "subtask": { "type": "string" },
+          "skills": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/envelope.schema.json",
+  "title": "Envelope",
+  "description": "The v1 JarvisVR message envelope. Every wire message is exactly this object.",
+  "type": "object",
+  "required": ["v", "id", "type", "ts", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "description": "Protocol version (semver). v1.3 accepts 1.0.0–1.3.0 clients.",
+      "enum": ["1.0.0", "1.1.0", "1.2.0", "1.3.0"]
+    },
+    "id": {
+      "description": "Unique message id. Spec recommends UUID v4 but any non-empty string is accepted.",
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "description": "namespace.name, see the message catalog.",
+      "type": "string",
+      "minLength": 1
+    },
+    "ts": {
+      "description": "Epoch milliseconds (sender clock).",
+      "type": "integer",
+      "minimum": 0
+    },
+    "session": {
+      "description": "Session id (assigned in hello_ack); omitted on the first client.hello.",
+      "type": "string",
+      "minLength": 1
+    },
+    "reply_to": {
+      "description": "Optional id of the message this one responds to.",
+      "type": "string",
+      "minLength": 1
+    },
+    "payload": {
+      "description": "Type-specific object (may be {}).",
+      "type": "object"
+    }
+  }
+}

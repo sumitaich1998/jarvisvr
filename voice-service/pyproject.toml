@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jarvis-voice"
+version = "0.1.0"
+description = "JarvisVR voice interface service: wake word + STT + TTS pipeline with pluggable engines and offline fallbacks."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "JarvisVR Voice" }]
+keywords = ["voice", "stt", "tts", "wake-word", "jarvis", "vr", "quest3"]
+
+# --- Base runtime: intentionally light. Heavy engines live in extras below. ---
+dependencies = [
+    "websockets>=12.0,<13.0",   # bridge to agent-backend WebSocket
+    "numpy>=1.24,<2.0",          # audio framing / energy VAD (numpy<2 keeps ML extras happy)
+    "python-dotenv>=1.0.0,<2.0", # .env loading for config
+]
+
+[project.optional-dependencies]
+# Wake word engines (pick one; fallback = EnergyFallback, no deps)
+wake-openwakeword = ["openwakeword>=0.6.0"]
+wake-porcupine = ["pvporcupine>=3.0.0"]
+
+# STT engines (pick one; fallback = MockSTT, no deps)
+stt-whisper = ["faster-whisper>=1.0.0"]
+stt-vosk = ["vosk>=0.3.45"]
+
+# TTS engines (pick one; fallback = MockTTS, no deps)
+tts-piper = ["piper-tts>=1.2.0"]
+tts-pyttsx3 = ["pyttsx3>=2.90"]
+
+# Sound-event detection (v1.1; fallback = HeuristicSoundEvents, no deps)
+sound-yamnet = ["tensorflow>=2.13", "tensorflow-hub>=0.15"]
+
+# Audio I/O (mic capture + speaker playback). Optional so headless still imports.
+audio = ["sounddevice>=0.4.6"]
+
+# Dev / test
+dev = ["pytest>=8.0", "pytest-cov>=4.1"]
+
+# Convenience: the recommended open/offline stack
+recommended = [
+    "openwakeword>=0.6.0",
+    "faster-whisper>=1.0.0",
+    "piper-tts>=1.2.0",
+    "sounddevice>=0.4.6",
+]
+
+# Everything (heavy; mostly for CI of optional paths)
+all = [
+    "openwakeword>=0.6.0",
+    "pvporcupine>=3.0.0",
+    "faster-whisper>=1.0.0",
+    "vosk>=0.3.45",
+    "piper-tts>=1.2.0",
+    "pyttsx3>=2.90",
+    "tensorflow>=2.13",
+    "tensorflow-hub>=0.15",
+    "sounddevice>=0.4.6",
+]
+
+[project.scripts]
+jarvis-voice = "jarvis_voice.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["jarvis_voice*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+source = ["jarvis_voice"]
+branch = true
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true

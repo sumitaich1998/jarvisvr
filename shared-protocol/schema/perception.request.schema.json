@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.request.schema.json",
+  "title": "perception.request payload",
+  "description": "PROTOCOL.md §8.4 — server→client start/stop/snapshot/adjust a perception stream (pull-based).",
+  "type": "object",
+  "required": ["stream", "action"],
+  "properties": {
+    "stream": { "$ref": "common.schema.json#/$defs/perception_stream" },
+    "action": { "type": "string", "enum": ["start", "stop", "once", "set"] },
+    "fps": { "type": "number", "minimum": 0 },
+    "max_resolution": { "type": "string" },
+    "quality": { "type": "integer", "minimum": 1, "maximum": 100 },
+    "duration_ms": { "type": "integer", "minimum": 0 },
+    "reason": { "type": "string" }
+  }
+}

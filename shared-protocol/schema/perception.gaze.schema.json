@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.gaze.schema.json",
+  "title": "perception.gaze payload",
+  "description": "PROTOCOL.md §8.4 — gaze/attention ray, dwell, and hit object.",
+  "type": "object",
+  "required": ["origin", "direction"],
+  "properties": {
+    "source": { "type": "string", "enum": ["eyes", "head"] },
+    "origin": { "$ref": "common.schema.json#/$defs/vec3" },
+    "direction": { "$ref": "common.schema.json#/$defs/vec3" },
+    "hit_object_id": { "type": ["string", "null"] },
+    "hit_point": { "$ref": "common.schema.json#/$defs/vec3" },
+    "dwell_ms": { "type": "integer", "minimum": 0 }
+  }
+}

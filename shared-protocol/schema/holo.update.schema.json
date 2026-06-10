@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/holo.update.schema.json",
+  "title": "holo.update payload",
+  "description": "PROTOCOL.md §5.8 — partial patch; omit unchanged keys.",
+  "type": "object",
+  "required": ["object_id"],
+  "properties": {
+    "object_id": { "type": "string", "minLength": 1 },
+    "transform": { "$ref": "common.schema.json#/$defs/transform" },
+    "props": { "type": "object" }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/holo.spawn.schema.json",
+  "title": "holo.spawn payload",
+  "description": "PROTOCOL.md §5.7 — payload is a Holographic Object (§5.6).",
+  "$ref": "holo_object.schema.json"
+}

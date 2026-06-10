@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.hello.schema.json",
+  "title": "client.hello payload",
+  "description": "PROTOCOL.md §5.1 — handshake; device + capability advertisement.",
+  "type": "object",
+  "required": ["device", "protocol_version"],
+  "properties": {
+    "device": { "type": "string", "minLength": 1 },
+    "app_version": { "type": "string" },
+    "protocol_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "passthrough": { "type": "boolean" },
+        "hand_tracking": { "type": "boolean" },
+        "controllers": { "type": "boolean" },
+        "mic": { "type": "boolean" },
+        "speaker": { "type": "boolean" },
+        "scene_understanding": { "type": "boolean" },
+        "camera_passthrough": { "type": "boolean", "description": "v1.1: RGB passthrough camera frames." },
+        "ambient_audio": { "type": "boolean", "description": "v1.1: continuous room-audio listening." },
+        "eye_tracking": { "type": "boolean", "description": "v1.1: gaze ray (if available)." },
+        "on_device_vision": { "type": "boolean", "description": "v1.1: client-side object detection." },
+        "depth": { "type": "boolean", "description": "v1.1: depth / scene mesh available." }
+      }
+    },
+    "locale": { "type": "string" }
+  }
+}

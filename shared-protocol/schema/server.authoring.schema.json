@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/server.authoring.schema.json",
+  "title": "server.authoring payload",
+  "description": "PROTOCOL.md §10.2 — authorable agents & skills catalog (reply to author_*). v1.3.",
+  "type": "object",
+  "required": ["agents", "skills"],
+  "properties": {
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "name"],
+        "properties": {
+          "role": { "type": "string", "minLength": 1 },
+          "name": { "type": "string" },
+          "source": { "type": "string", "enum": ["builtin", "user"] },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "tools": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "agent": { "type": "string" },
+          "category": { "type": "string" },
+          "source": { "type": "string", "enum": ["builtin", "user"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "categories": { "type": "array", "items": { "type": "string" } },
+    "tools": { "type": "array", "items": { "type": "string" } }
+  }
+}

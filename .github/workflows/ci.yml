@@ -1,0 +1,143 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# NOTE: the Unity client (unity-client/) is NOT built in CI — it requires Unity
+# + the Meta XR SDK and is built locally / on a self-hosted runner. CI covers the
+# Python + TypeScript components and the protocol conformance e2e.
+#
+# COVERAGE: every Python job runs pytest with branch coverage
+# (--cov=<pkg> --cov-branch --cov-report=term-missing) and the TS job runs
+# `vitest run --coverage`. The components owned by Integration —
+# shared-protocol (py) and infra (mock-backend + e2e) — are gated at 100%
+# (shared-protocol/python via [tool.coverage.report] fail_under=100; infra via
+# --cov-fail-under=100; TS via vitest coverage thresholds). The other components'
+# jobs report coverage without a gate (--cov-fail-under=0) so they stay green.
+# Locally: `infra/scripts/coverage.sh` runs all suites and prints a summary.
+
+jobs:
+  agent-backend:
+    name: agent-backend · pytest + cov
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - run: pip install pytest-cov
+      - run: pytest --cov=jarvis_backend --cov-branch --cov-report=term-missing --cov-fail-under=0
+
+  holo-tools:
+    name: holo-tools · pytest + cov
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: holo-tools
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[test]"
+      - run: pip install pytest-cov
+      - run: pytest --cov=holo_tools --cov-branch --cov-report=term-missing --cov-fail-under=0
+
+  voice-service:
+    name: voice-service · pytest + cov
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: voice-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - run: pip install pytest-cov
+      - run: pytest --cov=jarvis_voice --cov-branch --cov-report=term-missing --cov-fail-under=0
+
+  shared-protocol-python:
+    name: shared-protocol (py) · pytest + cov (100%)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shared-protocol/python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      # fail_under=100 is enforced via [tool.coverage.report] in pyproject.toml.
+      - run: pytest --cov=jarvis_protocol --cov-branch --cov-report=term-missing
+
+  shared-protocol-ts:
+    name: shared-protocol (ts) · vitest + coverage (100%)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shared-protocol/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm run build
+      # 100% thresholds are enforced in vitest.config.ts (coverage.thresholds).
+      - run: npm run test:coverage
+
+  infra-e2e:
+    name: infra · e2e conformance + cov (100%)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ./shared-protocol/python
+      - run: pip install -r infra/e2e/requirements.txt
+      # Covers the mock brain (server.py) + the e2e harness/validators, gated at 100%.
+      - run: pytest infra/e2e --cov=server --cov=harness --cov=holo_tools --cov-branch --cov-report=term-missing --cov-fail-under=100
+
+  lint:
+    name: lint · compile + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m compileall -q \
+            agent-backend/jarvis_backend \
+            voice-service/jarvis_voice \
+            holo-tools/holo_tools \
+            shared-protocol/python/src \
+            infra
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: cd shared-protocol/typescript && npm install && npm run typecheck

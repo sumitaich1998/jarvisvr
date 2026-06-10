@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/heartbeat.schema.json",
+  "title": "heartbeat payload",
+  "description": "PROTOCOL.md §1 — client.heartbeat / server.heartbeat keepalive. Payload is {}.",
+  "type": "object"
+}

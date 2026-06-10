@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/agent.speech.schema.json",
+  "title": "agent.speech payload",
+  "description": "PROTOCOL.md §5.5 — text for Jarvis to speak (TTS) and/or caption. Stream with final:false, end with final:true.",
+  "type": "object",
+  "required": ["text"],
+  "properties": {
+    "text": { "type": "string" },
+    "final": { "type": "boolean" },
+    "emotion": { "type": "string" }
+  }
+}

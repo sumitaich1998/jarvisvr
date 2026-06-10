@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/server.hello_ack.schema.json",
+  "title": "server.hello_ack payload",
+  "description": "PROTOCOL.md §5.2 — handshake response; session id + server capabilities.",
+  "type": "object",
+  "required": ["session", "protocol_version"],
+  "properties": {
+    "session": { "type": "string", "minLength": 1 },
+    "protocol_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "agent": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "model": { "type": "string" }
+      }
+    },
+    "tools": {
+      "description": "Tool names only; full schemas live in holo-tools.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "voice": {
+      "type": "object",
+      "properties": {
+        "tts": { "type": "boolean" },
+        "wake_word": { "type": "string" }
+      }
+    }
+  }
+}

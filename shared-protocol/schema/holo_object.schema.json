@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/holo_object.schema.json",
+  "title": "Holographic Object",
+  "description": "PROTOCOL.md §5.6 — the object used across holo.spawn / holo.update.",
+  "type": "object",
+  "required": ["object_id", "widget_type", "transform"],
+  "properties": {
+    "object_id": {
+      "description": "Server-assigned, stable for the object's lifetime.",
+      "type": "string",
+      "minLength": 1
+    },
+    "widget_type": {
+      "description": "Must exist in holo-tools/registry.json.",
+      "type": "string",
+      "minLength": 1
+    },
+    "transform": {
+      "allOf": [
+        { "$ref": "common.schema.json#/$defs/transform" },
+        { "required": ["anchor", "position", "rotation", "scale"] }
+      ]
+    },
+    "props": {
+      "description": "Widget-specific; validated against the holo-tools props schema.",
+      "type": "object"
+    },
+    "interactable": { "type": "boolean" },
+    "interactions": {
+      "description": "Subset of the widget's supported interactions.",
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/interaction" }
+    },
+    "ttl_ms": {
+      "description": "0 = persists until destroyed.",
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

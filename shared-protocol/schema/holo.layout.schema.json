@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/holo.layout.schema.json",
+  "title": "holo.layout payload",
+  "description": "PROTOCOL.md §5.10 — batch arrange/anchor multiple objects.",
+  "type": "object",
+  "required": ["arrangement", "objects"],
+  "properties": {
+    "arrangement": { "type": "string", "enum": ["arc", "grid", "stack", "free"] },
+    "anchor": { "$ref": "common.schema.json#/$defs/anchor" },
+    "objects": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "spacing": { "type": "number" }
+  }
+}

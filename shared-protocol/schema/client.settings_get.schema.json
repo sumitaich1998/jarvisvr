@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.settings_get.schema.json",
+  "title": "client.settings_get payload",
+  "description": "PROTOCOL.md §5.15 — request current settings + provider catalog. Omit/section='all' for everything.",
+  "type": "object",
+  "properties": {
+    "section": {
+      "description": "Which settings section to fetch.",
+      "type": "string",
+      "enum": ["llm", "all"]
+    }
+  }
+}

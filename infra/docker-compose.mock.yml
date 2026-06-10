@@ -1,0 +1,22 @@
+# Override that swaps the real agent-backend for the self-contained mock brain.
+#
+#   # mock brain only (recommended for client/voice dev — no sibling images needed):
+#   docker compose -f docker-compose.yml -f docker-compose.mock.yml up --build agent-backend
+#
+#   # full stack against the mock brain (needs ../voice-service to exist):
+#   docker compose -f docker-compose.yml -f docker-compose.mock.yml up --build
+#
+# The mock implements PROTOCOL.md on ws://localhost:8765/jarvis. Its build
+# context is the repo root so the Dockerfile can COPY both shared-protocol/ and
+# infra/mock-backend/.
+
+services:
+  agent-backend:
+    build:
+      context: ..
+      dockerfile: infra/mock-backend/Dockerfile
+    image: jarvisvr/mock-backend:dev
+    environment:
+      JARVIS_HOST: "0.0.0.0"
+      JARVIS_PORT: "8765"
+      JARVIS_WS_PATH: "/jarvis"

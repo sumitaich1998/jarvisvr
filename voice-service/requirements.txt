@@ -1,0 +1,10 @@
+# JarvisVR voice-service — base runtime (light, runs fully offline with mocks).
+# Pinned exact versions are written by `pip freeze` after a verified install.
+# Optional engines live as extras in pyproject.toml; install e.g.:
+#   pip install -e ".[recommended]"     # openwakeword + faster-whisper + piper + sounddevice
+#   pip install -e ".[stt-vosk,tts-pyttsx3,wake-porcupine,audio]"
+#
+# Base deps (versions resolved+pinned during verification):
+websockets==12.0
+numpy==1.26.4
+python-dotenv==1.2.2

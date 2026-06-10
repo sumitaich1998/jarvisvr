@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/orchestration.agent_status.schema.json",
+  "title": "orchestration.agent_status payload",
+  "description": "PROTOCOL.md §9.2 — a single agent's lifecycle/progress update. v1.2, additive.",
+  "type": "object",
+  "required": ["plan_id", "agent_id", "role", "state"],
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "minLength": 1 },
+    "parent": { "type": ["string", "null"] },
+    "level": { "type": "integer", "minimum": 0 },
+    "state": {
+      "type": "string",
+      "enum": ["queued", "planning", "working", "delegating", "waiting", "done", "failed"]
+    },
+    "skill": { "type": "string" },
+    "label": { "type": "string" },
+    "progress": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/orchestration.trace_event.schema.json",
+  "title": "orchestration.trace_event payload",
+  "description": "PROTOCOL.md §10.1 — one live per-agent trace entry (secret-redacted). v1.3.",
+  "type": "object",
+  "required": ["plan_id", "seq", "ts", "agent_id", "role", "kind", "label"],
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 },
+    "seq": { "type": "integer", "minimum": 0 },
+    "ts": { "type": "integer", "minimum": 0 },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "minLength": 1 },
+    "parent": { "type": ["string", "null"] },
+    "level": { "type": "integer", "minimum": 0 },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "memory_read", "memory_write", "skill_activated", "tool_call",
+        "tool_result", "observation", "delegated", "speech", "error"
+      ]
+    },
+    "label": { "type": "string" },
+    "skill": { "type": "string" },
+    "tool": { "type": "string" },
+    "detail": { "type": "string" },
+    "duration_ms": { "type": "integer", "minimum": 0 }
+  }
+}

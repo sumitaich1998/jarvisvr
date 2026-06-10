@@ -1,0 +1,26 @@
+{
+  "name": "JarvisVR.Meta",
+  "rootNamespace": "JarvisVR.Meta",
+  "references": [
+    "JarvisVR",
+    "JarvisVR.Protocol",
+    "Oculus.VR"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "HAS_META_CORE"
+  ],
+  "versionDefines": [
+    {
+      "name": "com.meta.xr.sdk.core",
+      "expression": "",
+      "define": "HAS_META_CORE"
+    }
+  ],
+  "noEngineReferences": false
+}

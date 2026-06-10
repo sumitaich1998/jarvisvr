@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.trace_get.schema.json",
+  "title": "client.trace_get payload",
+  "description": "PROTOCOL.md §10.1 — fetch the full trace for a turn (omit plan_id for the most recent). v1.3.",
+  "type": "object",
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/server.settings.schema.json",
+  "title": "server.settings payload",
+  "description": "PROTOCOL.md §5.15 — current settings + provider catalog. SECURITY: the API key is NEVER returned; only the boolean key_set. Every object here is closed (additionalProperties:false), so an 'api_key' field anywhere makes the message invalid.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["llm"],
+  "properties": {
+    "llm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current", "providers"],
+      "properties": {
+        "current": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "model", "key_set"],
+          "properties": {
+            "provider": { "type": "string" },
+            "model": { "type": "string" },
+            "base_url": { "type": ["string", "null"] },
+            "key_set": { "type": "boolean" }
+          }
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "default_model", "needs_key", "needs_base_url", "key_set", "capabilities"],
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "default_model": { "type": "string" },
+              "models": { "type": "array", "items": { "type": "string" } },
+              "needs_key": { "type": "boolean" },
+              "needs_base_url": { "type": "boolean" },
+              "key_set": { "type": "boolean" },
+              "capabilities": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "tools": { "type": "boolean" },
+                  "vision": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

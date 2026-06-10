@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/agent.thinking.schema.json",
+  "title": "agent.thinking payload",
+  "description": "PROTOCOL.md §5.4 — status/stage update.",
+  "type": "object",
+  "required": ["stage"],
+  "properties": {
+    "stage": { "type": "string", "enum": ["planning", "tool_call", "rendering", "done", "perceiving", "looking"] },
+    "label": { "type": "string" },
+    "tool": { "type": "string" },
+    "agent_id": { "description": "v1.2 §9: attribute this step to a team agent.", "type": "string" },
+    "role": { "description": "v1.2 §9: the agent's specialist role.", "type": "string" },
+    "skill": { "description": "v1.2 §9: the active skill id.", "type": "string" }
+  }
+}

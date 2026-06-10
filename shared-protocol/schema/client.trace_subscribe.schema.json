@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.trace_subscribe.schema.json",
+  "title": "client.trace_subscribe payload",
+  "description": "PROTOCOL.md §10.1 — enable/disable live per-agent trace streaming. v1.3.",
+  "type": "object",
+  "required": ["enabled"],
+  "properties": {
+    "enabled": { "type": "boolean" }
+  }
+}

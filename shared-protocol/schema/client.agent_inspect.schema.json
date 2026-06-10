@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.agent_inspect.schema.json",
+  "title": "client.agent_inspect payload",
+  "description": "PROTOCOL.md §10.1 — inspect an agent by role or agent_id. v1.3.",
+  "type": "object",
+  "properties": {
+    "role": { "type": "string", "minLength": 1 },
+    "agent_id": { "type": "string", "minLength": 1 }
+  },
+  "anyOf": [
+    { "required": ["role"] },
+    { "required": ["agent_id"] }
+  ]
+}

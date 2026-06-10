@@ -1,0 +1,3620 @@
+{
+  "version": "1.1.0",
+  "description": "Agent-facing tool/function schemas for JarvisVR. Group (a) widget tools (x_action='spawn') are derived from registry.json; group (b) utility tools (arrange_holograms/close_hologram/update_hologram). Strip x_* keys before sending to an LLM if your provider rejects unknown fields.",
+  "tools": [
+    {
+      "name": "show_weather",
+      "description": "Weather Orb: A floating, glanceable orb showing current conditions for a city, with an optional multi-day forecast that expands on tap. Produces a 'weather_orb' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "description": "City or location name to display."
+          },
+          "temp_c": {
+            "type": "number",
+            "description": "Current temperature in degrees Celsius."
+          },
+          "condition": {
+            "type": "string",
+            "enum": [
+              "clear",
+              "partly_cloudy",
+              "clouds",
+              "rain",
+              "snow",
+              "storm",
+              "fog",
+              "wind"
+            ],
+            "description": "Current weather condition."
+          },
+          "humidity_pct": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Relative humidity percentage."
+          },
+          "wind_kph": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Wind speed in km/h."
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "c",
+              "f"
+            ],
+            "default": "c",
+            "description": "Display unit for temperatures."
+          },
+          "forecast": {
+            "type": "array",
+            "description": "Optional multi-day forecast entries.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "day",
+                "high_c",
+                "low_c",
+                "condition"
+              ],
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "description": "Short day label, e.g. 'Mon'."
+                },
+                "high_c": {
+                  "type": "number"
+                },
+                "low_c": {
+                  "type": "number"
+                },
+                "condition": {
+                  "type": "string",
+                  "enum": [
+                    "clear",
+                    "partly_cloudy",
+                    "clouds",
+                    "rain",
+                    "snow",
+                    "storm",
+                    "fog",
+                    "wind"
+                  ]
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "city",
+          "temp_c",
+          "condition"
+        ]
+      },
+      "x_widget_type": "weather_orb",
+      "x_prefab_id": "Holo_WeatherOrb",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_chart",
+      "description": "3D Chart: A volumetric data chart (bar, line, scatter, pie, or surface) with one or more series, axis labels, and selectable data points. Produces a 'chart_3d' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chart_type": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "line",
+              "scatter",
+              "pie",
+              "surface"
+            ],
+            "description": "Visual style of the chart."
+          },
+          "title": {
+            "type": "string",
+            "description": "Chart title."
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Category labels for the primary axis."
+          },
+          "series": {
+            "type": "array",
+            "minItems": 1,
+            "description": "One or more data series.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "values"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 1
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                }
+              }
+            }
+          },
+          "x_axis_label": {
+            "type": "string"
+          },
+          "y_axis_label": {
+            "type": "string"
+          },
+          "z_axis_label": {
+            "type": "string"
+          },
+          "show_legend": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "chart_type",
+          "series"
+        ]
+      },
+      "x_widget_type": "chart_3d",
+      "x_prefab_id": "Holo_Chart3D",
+      "x_action": "spawn"
+    },
+    {
+      "name": "open_model_viewer",
+      "description": "3D Model Viewer: Loads and displays a 3D model (glTF/GLB/OBJ/FBX) that the user can grab, spin, and scale; supports auto-rotate and named animations. Produces a 'model_viewer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the 3D model asset."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name / caption for the model."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "glb",
+              "gltf",
+              "obj",
+              "fbx"
+            ],
+            "default": "glb",
+            "description": "Asset format hint for the loader."
+          },
+          "auto_rotate": {
+            "type": "boolean",
+            "default": false,
+            "description": "Continuously spin the model when idle."
+          },
+          "animation": {
+            "type": "string",
+            "description": "Name of an embedded animation clip to play."
+          },
+          "scale_factor": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 1.0,
+            "description": "Uniform scale applied to the loaded model."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "model_url"
+        ]
+      },
+      "x_widget_type": "model_viewer",
+      "x_prefab_id": "Holo_ModelViewer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_panel",
+      "description": "Info Panel: A flat glass/solid panel for rich text content organized into optional sections; the workhorse container for readable information. Produces a 'panel' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Panel heading."
+          },
+          "body": {
+            "type": "string",
+            "description": "Primary body text (plain or lightweight markdown)."
+          },
+          "sections": {
+            "type": "array",
+            "description": "Optional list of labelled sub-sections.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "heading",
+                "text"
+              ],
+              "properties": {
+                "heading": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "width_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.6,
+            "description": "Panel width in meters."
+          },
+          "height_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.4,
+            "description": "Panel height in meters."
+          },
+          "background": {
+            "type": "string",
+            "enum": [
+              "glass",
+              "solid",
+              "none"
+            ],
+            "default": "glass",
+            "description": "Panel background style."
+          },
+          "scrollable": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "x_widget_type": "panel",
+      "x_prefab_id": "Holo_Panel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_text",
+      "description": "Text Label: A lightweight floating text primitive for captions, headings, and annotations anchored in space. Produces a 'text_label' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Text to display."
+          },
+          "font_size_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.05,
+            "description": "Cap height in meters."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "default": "#FFFFFF",
+            "description": "Hex text color."
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ],
+            "default": "center"
+          },
+          "weight": {
+            "type": "string",
+            "enum": [
+              "regular",
+              "bold"
+            ],
+            "default": "regular"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "x_widget_type": "text_label",
+      "x_prefab_id": "Holo_TextLabel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_button",
+      "description": "Button: A pressable holographic button that emits an event on tap or dwell; used for confirmations and quick actions. Produces a 'button' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Button caption."
+          },
+          "icon": {
+            "type": "string",
+            "description": "Optional icon id from the client icon set."
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "secondary",
+              "danger",
+              "ghost"
+            ],
+            "default": "primary"
+          },
+          "action_id": {
+            "type": "string",
+            "description": "Semantic id echoed back in the press event so the agent knows what was invoked."
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "label"
+        ]
+      },
+      "x_widget_type": "button",
+      "x_prefab_id": "Holo_Button",
+      "x_action": "spawn"
+    },
+    {
+      "name": "start_timer",
+      "description": "Timer: A countdown or stopwatch with play/pause/reset controls; emits control events the agent reacts to. Produces a 'timer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Optional timer label, e.g. 'Tea'."
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total configured duration in milliseconds."
+          },
+          "remaining_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Remaining time in milliseconds."
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "idle",
+              "running",
+              "paused",
+              "completed"
+            ],
+            "description": "Current timer state."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "countdown",
+              "stopwatch"
+            ],
+            "default": "countdown"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "duration_ms",
+          "remaining_ms",
+          "state"
+        ]
+      },
+      "x_widget_type": "timer",
+      "x_prefab_id": "Holo_Timer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "play_media",
+      "description": "Media Player: Plays an audio or video source with transport controls and a scrubber; emits play/pause, seek, and volume events. Produces a 'media_player' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the media."
+          },
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the audio/video source."
+          },
+          "media_type": {
+            "type": "string",
+            "enum": [
+              "audio",
+              "video"
+            ],
+            "description": "Kind of media."
+          },
+          "poster_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional poster/thumbnail image URL."
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "playing",
+              "paused",
+              "stopped",
+              "buffering"
+            ],
+            "default": "playing"
+          },
+          "position_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "Current playhead position in milliseconds."
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total media duration in milliseconds."
+          },
+          "volume": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.8
+          },
+          "loop": {
+            "type": "boolean",
+            "default": false
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "source_url",
+          "media_type"
+        ]
+      },
+      "x_widget_type": "media_player",
+      "x_prefab_id": "Holo_MediaPlayer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_map",
+      "description": "3D Map: An interactive tilted 3D map centered on a coordinate, with markers, zoom, and pan; emits marker selection and navigation events. Produces a 'map_3d' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "center": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lat",
+              "lon"
+            ],
+            "properties": {
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              }
+            }
+          },
+          "zoom": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 22,
+            "default": 12
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "streets",
+              "satellite",
+              "terrain",
+              "dark"
+            ],
+            "default": "streets"
+          },
+          "pitch_deg": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 85,
+            "default": 45
+          },
+          "markers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "label": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "center"
+        ]
+      },
+      "x_widget_type": "map_3d",
+      "x_prefab_id": "Holo_Map3D",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_smart_home",
+      "description": "Smart Home Panel: Controls a group of smart-home devices (lights, thermostat, locks, plugs, etc.) with toggles and sliders; emits device control events. Produces a 'smart_home_panel' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "room": {
+            "type": "string",
+            "description": "Optional room/group name."
+          },
+          "devices": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Devices shown and controllable in this panel.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "type",
+                "state"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Stable device id."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Human-friendly device name."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "light",
+                    "thermostat",
+                    "lock",
+                    "plug",
+                    "speaker",
+                    "blind",
+                    "sensor",
+                    "camera"
+                  ],
+                  "description": "Device kind."
+                },
+                "state": {
+                  "type": "object",
+                  "description": "Current device state. Common keys below; device-specific keys are allowed.",
+                  "additionalProperties": true,
+                  "properties": {
+                    "on": {
+                      "type": "boolean"
+                    },
+                    "level": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Generic level 0-100 (e.g. brightness, volume, blind position)."
+                    },
+                    "temperature_c": {
+                      "type": "number"
+                    },
+                    "locked": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "unit": {
+                  "type": "string",
+                  "description": "Optional unit for the device's primary value, e.g. 'C' or '%'."
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "devices"
+        ]
+      },
+      "x_widget_type": "smart_home_panel",
+      "x_prefab_id": "Holo_SmartHomePanel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_todo_list",
+      "description": "To-do List: A checkable list of tasks with optional priorities; emits toggle and selection events as the user checks items off. Produces a 'todo_list' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "List heading."
+          },
+          "items": {
+            "type": "array",
+            "description": "Task items.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "text"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "done": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "x_widget_type": "todo_list",
+      "x_prefab_id": "Holo_TodoList",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_image_board",
+      "description": "Image Board: A grid, carousel, or stack of images with captions; emits selection/navigation events as the user browses. Produces a 'image_board' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "caption": {
+                  "type": "string"
+                },
+                "alt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "grid",
+              "carousel",
+              "stack"
+            ],
+            "default": "grid"
+          },
+          "columns": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6,
+            "default": 3
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "images"
+        ]
+      },
+      "x_widget_type": "image_board",
+      "x_prefab_id": "Holo_ImageBoard",
+      "x_action": "spawn"
+    },
+    {
+      "name": "annotate_object",
+      "description": "Vision Annotation: A world-anchored callout that labels a real object Jarvis recognizes, with optional confidence, detail text, and a leader line to the target. Produces a 'vision_annotation' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the recognized object."
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence 0.0-1.0."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Optional extra description (material, size, etc.)."
+          },
+          "leader_line": {
+            "type": "boolean",
+            "default": true,
+            "description": "Draw a line from the callout to the target."
+          },
+          "target_object_id": {
+            "type": "string",
+            "description": "Object/anchor id of the real object being annotated."
+          },
+          "target_position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "World position of the target point (meters)."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+          },
+          "icon": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "label"
+        ]
+      },
+      "x_widget_type": "vision_annotation",
+      "x_prefab_id": "Holo_VisionAnnotation",
+      "x_action": "spawn"
+    },
+    {
+      "name": "draw_bounding_box",
+      "description": "3D Bounding Box: A volumetric box drawn around a detected real-world object, with a label and confidence. Produces a 'bounding_box_3d' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence 0.0-1.0."
+          },
+          "size": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Box extents [width, height, depth] in meters."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+          },
+          "filled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Render translucent faces instead of just edges."
+          },
+          "target_object_id": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "label",
+          "size"
+        ]
+      },
+      "x_widget_type": "bounding_box_3d",
+      "x_prefab_id": "Holo_BoundingBox3D",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_live_caption",
+      "description": "Live Captions: A rolling caption panel that displays speech Jarvis hears in real time (ambient transcript / translation). Produces a 'live_caption' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Caption lines, newest last."
+          },
+          "speaker": {
+            "type": "string",
+            "enum": [
+              "user",
+              "other",
+              "jarvis",
+              "unknown"
+            ],
+            "default": "other",
+            "description": "Who is currently speaking (PROTOCOL.md §8.4)."
+          },
+          "max_lines": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 3,
+            "description": "How many lines to keep visible."
+          },
+          "language": {
+            "type": "string",
+            "description": "BCP-47 language tag of the captions."
+          },
+          "translated": {
+            "type": "boolean",
+            "default": false,
+            "description": "True if these captions are a translation."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "x_widget_type": "live_caption",
+      "x_prefab_id": "Holo_LiveCaption",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_vision_feed",
+      "description": "Vision Feed: A small panel showing what Jarvis currently sees through the passthrough camera, with detection overlays and a freeze control. Produces a 'vision_feed' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "default": "What Jarvis sees"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "rgb_center",
+              "rgb_left",
+              "rgb_right"
+            ],
+            "default": "rgb_center",
+            "description": "Passthrough camera (PROTOCOL.md §8.4)."
+          },
+          "frozen": {
+            "type": "boolean",
+            "default": false,
+            "description": "Freeze the currently displayed frame."
+          },
+          "fps": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Current feed frame rate."
+          },
+          "frame_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL/data-uri of the latest frame snapshot."
+          },
+          "show_detections": {
+            "type": "boolean",
+            "default": true,
+            "description": "Overlay detected-object boxes."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "vision_feed",
+      "x_prefab_id": "Holo_VisionFeed",
+      "x_action": "spawn"
+    },
+    {
+      "name": "drop_scene_label",
+      "description": "Scene Label: A lightweight pin/label dropped at a point in the room (e.g. spatial-memory markers like 'keys last seen here'). Produces a 'scene_label' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "icon": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+          },
+          "pin": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show a pin/dot anchor under the label."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "x_widget_type": "scene_label",
+      "x_prefab_id": "Holo_SceneLabel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_clock",
+      "description": "Clock: A floating analog or digital clock for a given timezone. Produces a 'clock' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone, e.g. 'America/New_York'."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "12h",
+              "24h"
+            ],
+            "default": "24h"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "analog",
+              "digital"
+            ],
+            "default": "digital"
+          },
+          "show_seconds": {
+            "type": "boolean",
+            "default": true
+          },
+          "show_date": {
+            "type": "boolean",
+            "default": true
+          },
+          "label": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "clock",
+      "x_prefab_id": "Holo_Clock",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_world_clock",
+      "description": "World Clock: Several clocks for different cities/timezones at a glance. Produces a 'world_clock' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "zones": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "timezone"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "timezone": {
+                  "type": "string",
+                  "description": "IANA timezone."
+                },
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "12h",
+                    "24h"
+                  ]
+                }
+              }
+            }
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "list",
+              "row"
+            ],
+            "default": "list"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "zones"
+        ]
+      },
+      "x_widget_type": "world_clock",
+      "x_prefab_id": "Holo_WorldClock",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_calendar",
+      "description": "Calendar: A calendar/agenda surface showing events for a day, week, or month. Produces a 'calendar' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "day",
+              "week",
+              "month",
+              "agenda"
+            ],
+            "default": "agenda"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Focused date (ISO 8601)."
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "start"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                },
+                "all_day": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "events"
+        ]
+      },
+      "x_widget_type": "calendar",
+      "x_prefab_id": "Holo_Calendar",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_stocks",
+      "description": "Stocks Ticker: A scrolling ticker of stock/crypto symbols with prices and percentage changes. Produces a 'stocks_ticker' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "symbols": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "symbol",
+                "price"
+              ],
+              "properties": {
+                "symbol": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "change_pct": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "scroll": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "symbols"
+        ]
+      },
+      "x_widget_type": "stocks_ticker",
+      "x_prefab_id": "Holo_StocksTicker",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_news",
+      "description": "News Feed: A scrollable feed of news headlines with sources and summaries. Produces a 'news_feed' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "articles": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "headline"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "headline": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "image_url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "published_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "articles"
+        ]
+      },
+      "x_widget_type": "news_feed",
+      "x_prefab_id": "Holo_NewsFeed",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_translator",
+      "description": "Translator: A live translation panel for text, conversation, or signs read from the camera. Produces a 'translator' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "source_lang": {
+            "type": "string",
+            "description": "BCP-47 source language or 'auto'."
+          },
+          "target_lang": {
+            "type": "string",
+            "description": "BCP-47 target language."
+          },
+          "source_text": {
+            "type": "string"
+          },
+          "translated_text": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "text",
+              "conversation",
+              "sign"
+            ],
+            "default": "text"
+          },
+          "listening": {
+            "type": "boolean",
+            "default": false
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "source_lang",
+          "target_lang"
+        ]
+      },
+      "x_widget_type": "translator",
+      "x_prefab_id": "Holo_Translator",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_recipe",
+      "description": "Recipe Card: A step-by-step cooking card with ingredients, timings, and a current-step highlight. Produces a 'recipe_card' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "servings": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "prep_min": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "cook_min": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "ingredients": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "current_step": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "title",
+          "ingredients",
+          "steps"
+        ]
+      },
+      "x_widget_type": "recipe_card",
+      "x_prefab_id": "Holo_RecipeCard",
+      "x_action": "spawn"
+    },
+    {
+      "name": "open_whiteboard",
+      "description": "Whiteboard: A free-form sketch surface the user can draw on with hand strokes. Produces a 'whiteboard' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "width_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 1.2
+          },
+          "height_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.8
+          },
+          "background": {
+            "type": "string",
+            "enum": [
+              "white",
+              "dark",
+              "grid"
+            ],
+            "default": "white"
+          },
+          "strokes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "points"
+              ],
+              "properties": {
+                "points": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "description": "2D points [x, y] in board space (0-1)."
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                },
+                "width": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          },
+          "editable": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "whiteboard",
+      "x_prefab_id": "Holo_Whiteboard",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_sticky_note",
+      "description": "Sticky Note: A colored sticky note that can be placed and pinned in space. Produces a 'sticky_note' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "yellow",
+              "pink",
+              "blue",
+              "green",
+              "orange"
+            ],
+            "default": "yellow"
+          },
+          "pinned": {
+            "type": "boolean",
+            "default": false
+          },
+          "author": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "x_widget_type": "sticky_note",
+      "x_prefab_id": "Holo_StickyNote",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_code",
+      "description": "Code Viewer: A syntax-highlighted code panel with optional line highlighting and copy. Produces a 'code_viewer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "description": "Language id for highlighting, e.g. 'python'."
+          },
+          "title": {
+            "type": "string"
+          },
+          "theme": {
+            "type": "string",
+            "enum": [
+              "dark",
+              "light"
+            ],
+            "default": "dark"
+          },
+          "wrap": {
+            "type": "boolean",
+            "default": false
+          },
+          "highlight_lines": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "x_widget_type": "code_viewer",
+      "x_prefab_id": "Holo_CodeViewer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_document",
+      "description": "Document Viewer: A paged document viewer for PDFs, markdown, or text. Produces a 'document_viewer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "doc_type": {
+            "type": "string",
+            "enum": [
+              "pdf",
+              "markdown",
+              "text",
+              "docx"
+            ],
+            "default": "pdf"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "page_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "x_widget_type": "document_viewer",
+      "x_prefab_id": "Holo_DocumentViewer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_web",
+      "description": "Web Panel: An interactive browser surface that renders a web page in space. Produces a 'web_panel' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "width_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.9
+          },
+          "height_m": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.6
+          },
+          "interactive": {
+            "type": "boolean",
+            "default": true
+          },
+          "scroll_y": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "x_widget_type": "web_panel",
+      "x_prefab_id": "Holo_WebPanel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_avatar",
+      "description": "Jarvis Avatar: Jarvis's visual presence (orb/face/ring) that reflects agent state and emotion. Produces a 'avatar' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Jarvis"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "idle",
+              "listening",
+              "thinking",
+              "speaking"
+            ],
+            "default": "idle"
+          },
+          "emotion": {
+            "type": "string",
+            "enum": [
+              "neutral",
+              "happy",
+              "concerned",
+              "alert"
+            ],
+            "default": "neutral"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "orb",
+              "face",
+              "ring"
+            ],
+            "default": "orb"
+          },
+          "speaking_text": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "avatar",
+      "x_prefab_id": "Holo_Avatar",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_navigation",
+      "description": "Navigation Arrow: A wayfinding arrow/beam pointing toward a destination, with distance and ETA. Produces a 'navigation_arrow' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "target_label": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Unit direction vector to the destination."
+          },
+          "distance_m": {
+            "type": "number",
+            "minimum": 0
+          },
+          "eta_min": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "arrow",
+              "beam",
+              "path"
+            ],
+            "default": "arrow"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "direction"
+        ]
+      },
+      "x_widget_type": "navigation_arrow",
+      "x_prefab_id": "Holo_NavigationArrow",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_health_ring",
+      "description": "Health Rings: Activity/fitness rings showing progress toward daily goals. Produces a 'health_ring' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "rings": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "value",
+                "goal"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "goal": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "rings"
+        ]
+      },
+      "x_widget_type": "health_ring",
+      "x_prefab_id": "Holo_HealthRing",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_music_visualizer",
+      "description": "Music Visualizer: An audio-reactive 3D visualizer with now-playing info. Produces a 'music_visualizer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "track": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "bars",
+              "wave",
+              "particles",
+              "sphere"
+            ],
+            "default": "bars"
+          },
+          "amplitude": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "description": "Spectrum bins, each 0.0-1.0."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+          },
+          "playing": {
+            "type": "boolean",
+            "default": true
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "music_visualizer",
+      "x_prefab_id": "Holo_MusicVisualizer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_graph",
+      "description": "Network Graph: A 3D node/edge graph for relationships, networks, or knowledge graphs. Produces a 'graph_3d' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "nodes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                }
+              }
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source",
+                "target"
+              ],
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "force",
+              "radial",
+              "grid"
+            ],
+            "default": "force"
+          },
+          "directed": {
+            "type": "boolean",
+            "default": false
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "nodes"
+        ]
+      },
+      "x_widget_type": "graph_3d",
+      "x_prefab_id": "Holo_Graph3D",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_data_table",
+      "description": "Data Table: A scrollable, sortable table of rows and columns. Produces a 'data_table' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "key"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "string",
+                    "number",
+                    "bool"
+                  ]
+                }
+              }
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Each row maps column key -> value (open object; keys match columns)."
+          },
+          "sortable": {
+            "type": "boolean",
+            "default": true
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "columns",
+          "rows"
+        ]
+      },
+      "x_widget_type": "data_table",
+      "x_prefab_id": "Holo_DataTable",
+      "x_action": "spawn"
+    },
+    {
+      "name": "measure",
+      "description": "Measuring Tape: A spatial measurement tool that reports distance, area, or angle between placed points. Produces a 'measuring_tape' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "points": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "description": "World-space points [x, y, z] in meters."
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "m",
+              "cm",
+              "ft",
+              "in"
+            ],
+            "default": "m"
+          },
+          "distance_m": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Computed total distance in meters."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "distance",
+              "area",
+              "angle"
+            ],
+            "default": "distance"
+          },
+          "label": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "points"
+        ]
+      },
+      "x_widget_type": "measuring_tape",
+      "x_prefab_id": "Holo_MeasuringTape",
+      "x_action": "spawn"
+    },
+    {
+      "name": "start_pomodoro",
+      "description": "Pomodoro Timer: A focus/break Pomodoro timer with session tracking and controls. Produces a 'pomodoro' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": [
+              "focus",
+              "short_break",
+              "long_break",
+              "idle"
+            ]
+          },
+          "remaining_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "focus_ms": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "default": 1500000
+          },
+          "break_ms": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "default": 300000
+          },
+          "completed_sessions": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "running",
+              "paused",
+              "idle"
+            ],
+            "default": "idle"
+          },
+          "task": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "phase",
+          "remaining_ms"
+        ]
+      },
+      "x_widget_type": "pomodoro",
+      "x_prefab_id": "Holo_Pomodoro",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_generated_image",
+      "description": "AI Image Viewer: Displays AI-generated images with the prompt, generation status, and progress. Produces a 'image_gen_viewer' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "generating",
+              "done",
+              "error"
+            ],
+            "default": "done"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "seed": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "progress": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "model": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "prompt"
+        ]
+      },
+      "x_widget_type": "image_gen_viewer",
+      "x_prefab_id": "Holo_ImageGenViewer",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_globe",
+      "description": "Volumetric Globe: An interactive 3D Earth with markers and great-circle arcs. Produces a 'volumetric_globe' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "style": {
+            "type": "string",
+            "enum": [
+              "earth",
+              "night",
+              "political",
+              "topographic"
+            ],
+            "default": "earth"
+          },
+          "markers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "label": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                }
+              }
+            }
+          },
+          "arcs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "from_lat",
+                "from_lon",
+                "to_lat",
+                "to_lon"
+              ],
+              "properties": {
+                "from_lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "from_lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "to_lat": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "to_lon": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                }
+              }
+            }
+          },
+          "rotation_speed": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0.1
+          },
+          "auto_rotate": {
+            "type": "boolean",
+            "default": true
+          },
+          "highlight_country": {
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2/3 country code to highlight."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": []
+      },
+      "x_widget_type": "volumetric_globe",
+      "x_prefab_id": "Holo_VolumetricGlobe",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_system_launcher",
+      "description": "System Launcher: An app/widget launcher grid for opening JarvisVR apps and tools. Produces a 'system_launcher' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "default": "Apps"
+          },
+          "apps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+                  "description": "Hex color (#RRGGBB or #RRGGBBAA)."
+                },
+                "badge": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "columns": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 4
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "grid",
+              "ring",
+              "shelf"
+            ],
+            "default": "grid"
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "apps"
+        ]
+      },
+      "x_widget_type": "system_launcher",
+      "x_prefab_id": "Holo_SystemLauncher",
+      "x_action": "spawn"
+    },
+    {
+      "name": "notify",
+      "description": "Notification Toast: A transient notification banner with severity, optional actions, and auto-dismiss. Produces a 'notification_toast' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "body": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "success",
+              "warning",
+              "error"
+            ],
+            "default": "info"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "Originating app/service."
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "label"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "auto_dismiss_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 5000,
+            "description": "0 = sticky."
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "x_widget_type": "notification_toast",
+      "x_prefab_id": "Holo_NotificationToast",
+      "x_action": "spawn"
+    },
+    {
+      "name": "show_settings",
+      "description": "Settings Panel: A grouped settings surface with toggles, sliders, selects, and buttons. Produces a 'settings_panel' hologram (holo.spawn).",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "default": "Settings"
+          },
+          "sections": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "settings"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "settings": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "label",
+                      "type"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "toggle",
+                          "slider",
+                          "select",
+                          "button"
+                        ]
+                      },
+                      "value": {
+                        "description": "Current value (boolean, number, or string depending on type)."
+                      },
+                      "options": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "description": "Optional anchor override (defaults to the widget's default_transform.anchor)."
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Optional position [x, y, z] in meters relative to the anchor."
+          },
+          "billboard": {
+            "type": "boolean",
+            "description": "Optional: if true, the widget always faces the user."
+          }
+        },
+        "required": [
+          "sections"
+        ]
+      },
+      "x_widget_type": "settings_panel",
+      "x_prefab_id": "Holo_SettingsPanel",
+      "x_action": "spawn"
+    },
+    {
+      "name": "arrange_holograms",
+      "description": "Arrange existing holograms into a spatial layout (arc, grid, stack, or free). Maps to holo.layout.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "arrangement",
+          "object_ids"
+        ],
+        "properties": {
+          "arrangement": {
+            "type": "string",
+            "enum": [
+              "arc",
+              "grid",
+              "stack",
+              "free"
+            ]
+          },
+          "anchor": {
+            "type": "string",
+            "enum": [
+              "world",
+              "head",
+              "hand_left",
+              "hand_right",
+              "surface"
+            ],
+            "default": "head"
+          },
+          "object_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "Object ids to arrange."
+          },
+          "spacing": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 0.25,
+            "description": "Spacing between objects in meters."
+          }
+        }
+      },
+      "x_action": "layout"
+    },
+    {
+      "name": "close_hologram",
+      "description": "Remove a hologram from the scene. Maps to holo.destroy.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object_id"
+        ],
+        "properties": {
+          "object_id": {
+            "type": "string",
+            "description": "Id of the object to remove."
+          },
+          "fade_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 300,
+            "description": "Fade-out duration in milliseconds."
+          }
+        }
+      },
+      "x_action": "destroy"
+    },
+    {
+      "name": "update_hologram",
+      "description": "Patch the props and/or transform of an existing hologram. Maps to holo.update.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object_id"
+        ],
+        "properties": {
+          "object_id": {
+            "type": "string"
+          },
+          "props": {
+            "type": "object",
+            "description": "Partial props patch (validated against the object's widget schema)."
+          },
+          "transform": {
+            "type": "object",
+            "description": "Partial transform patch."
+          }
+        }
+      },
+      "x_action": "update"
+    }
+  ]
+}

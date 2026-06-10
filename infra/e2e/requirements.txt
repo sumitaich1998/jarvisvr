@@ -1,0 +1,6 @@
+# e2e harness deps. jarvis-protocol is installed separately (editable) from
+# ../../shared-protocol/python — see infra/scripts/e2e.sh / test.sh.
+websockets>=12,<14
+pytest>=7.4
+pytest-cov>=4.1
+jsonschema>=4.18

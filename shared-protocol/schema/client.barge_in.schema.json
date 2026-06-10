@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.barge_in.schema.json",
+  "title": "client.barge_in payload",
+  "description": "PROTOCOL.md §5.14 — user spoke over Jarvis; the server SHOULD cancel the in-flight turn (v1.1). Idempotent. Payload may be {}.",
+  "type": "object",
+  "properties": {
+    "reason": {
+      "description": "Why the turn was interrupted, e.g. 'user_speech'.",
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.interaction.schema.json",
+  "title": "client.interaction payload",
+  "description": "PROTOCOL.md §5.11 — user interacted with a hologram.",
+  "type": "object",
+  "required": ["object_id", "action"],
+  "properties": {
+    "object_id": { "type": "string", "minLength": 1 },
+    "widget_type": { "type": "string" },
+    "action": { "$ref": "common.schema.json#/$defs/interaction" },
+    "element": {
+      "description": "Optional sub-element id within the widget.",
+      "type": "string"
+    },
+    "value": {
+      "description": "Action data, e.g. {\"slider\": 0.4} or {\"position\": [..]}.",
+      "type": "object"
+    },
+    "hand": { "type": "string", "enum": ["left", "right"] }
+  }
+}

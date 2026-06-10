@@ -1,0 +1,72 @@
+# JarvisVR — base stack (real brain + voice).
+#
+# Conforms to the Compose Specification (no top-level `version:` key needed).
+# Build contexts point at sibling dirs owned by other teams (agent-backend/,
+# voice-service/). Those Dockerfiles may not exist yet — `docker compose config`
+# still validates this file's syntax; `up --build` needs the sibling images.
+#
+#   docker compose up --build            # real stack
+#   docker compose --profile gpu up      # voice-service with GPU (see below)
+#   docker compose -f docker-compose.yml -f docker-compose.mock.yml up agent-backend
+#                                        # swap in the local mock brain
+#
+# Env comes from infra/.env (copy from .env.example). See infra/README.md.
+
+services:
+  agent-backend:
+    build:
+      context: ../agent-backend
+      dockerfile: Dockerfile
+    image: jarvisvr/agent-backend:dev
+    env_file: .env
+    environment:
+      JARVIS_HOST: "0.0.0.0"
+      JARVIS_PORT: "8765"
+      JARVIS_WS_PATH: "/jarvis"
+    ports:
+      - "8765:8765"   # ws://localhost:8765/jarvis  (+ /vision binary transport, v1.1 — same port)
+    networks:
+      - jarvis
+    restart: unless-stopped
+    healthcheck:
+      # agent-backend is a Python WS server (see ARCHITECTURE §3.2); a TCP probe
+      # is enough to know the port is accepting connections.
+      test: ["CMD-SHELL", "python -c \"import socket; socket.create_connection(('127.0.0.1', 8765), 2).close()\" || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+
+  voice-service:
+    build:
+      context: ../voice-service
+      dockerfile: Dockerfile
+    image: jarvisvr/voice-service:dev
+    env_file: .env
+    environment:
+      # Reach the backend over the compose network (service DNS name).
+      JARVIS_BACKEND_URL: "ws://agent-backend:8765/jarvis"
+    depends_on:
+      # service_started (not service_healthy) so voice-service still comes up
+      # even if the sibling image lacks a python TCP probe.
+      agent-backend:
+        condition: service_started
+    networks:
+      - jarvis
+    restart: unless-stopped
+
+    # ---- Optional GPU (STT/TTS acceleration) -------------------------------
+    # Requires the NVIDIA Container Toolkit on the host. Either uncomment this
+    # block, or layer the ready-made override (keeps GPU opt-in):
+    #   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: ["gpu"]
+
+networks:
+  jarvis:
+    driver: bridge

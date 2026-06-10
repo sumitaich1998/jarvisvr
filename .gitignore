@@ -1,0 +1,68 @@
+# ---- Secrets / env ----
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# ---- Python (agent-backend, voice-service) ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# ---- Node / TypeScript (shared-protocol, tooling) ----
+node_modules/
+*.tsbuildinfo
+.npm/
+coverage/
+
+# ---- Unity (unity-client) ----
+unity-client/[Ll]ibrary/
+unity-client/[Tt]emp/
+unity-client/[Oo]bj/
+unity-client/[Bb]uild/
+unity-client/[Bb]uilds/
+unity-client/[Ll]ogs/
+unity-client/[Uu]ser[Ss]ettings/
+unity-client/[Mm]emoryCaptures/
+unity-client/[Rr]ecordings/
+*.apk
+*.aab
+*.csproj
+*.sln
+*.unityproj
+*.booproj
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.svd
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
+*.swp
+*~
+
+# ---- Docker / data ----
+*.log
+data/
+models/
+*.bin
+*.onnx
+*.gguf
+!**/registry.json

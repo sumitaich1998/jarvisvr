@@ -1,0 +1,273 @@
+{
+  "$schema_note": "Machine-readable index of JarvisVR Agent Skills (agentskills.io). Paths are relative to skills/.",
+  "version": "1.0",
+  "count": 38,
+  "skills": [
+    {
+      "name": "agent-routing",
+      "agent": "jarvis",
+      "category": "orchestration",
+      "description": "Route a single sub-task to the best specialist agent (or sub-agent) by matching it against the JarvisVR roster's roles, skill descriptions, and tool sets. Use after task-decomposition for each node, or directly for a one-shot request that clearly belongs to one specialist. Triggers: \"who should handle this\", route, dispatch, delegate, assign, pick an agent, fan out to sub-agents.",
+      "path": "orchestration/agent-routing"
+    },
+    {
+      "name": "clarify-intent",
+      "agent": "jarvis",
+      "category": "orchestration",
+      "description": "Ask one targeted clarifying question only when a goal is genuinely ambiguous AND that ambiguity blocks planning or routing. Use before task-decomposition when a request is under-specified (missing city, which device, which timer) or could map to very different plans. Triggers: ambiguous request, \"it\"/\"that\" with no referent, missing parameter, multiple plausible meanings, \"do the thing\".",
+      "path": "orchestration/clarify-intent"
+    },
+    {
+      "name": "result-synthesis",
+      "agent": "jarvis",
+      "category": "orchestration",
+      "description": "Merge the specialists' results into one coherent spoken reply and coordinate the final spatial layout, closing out a multi-agent turn. Use after the team's sub-tasks finish (or partially fail) to produce a single agent.speech{final} and hand compositing to the stage-agent. Triggers: synthesize, summarize the results, wrap up, combine answers, final reply, \"put it all together\".",
+      "path": "orchestration/result-synthesis"
+    },
+    {
+      "name": "task-decomposition",
+      "agent": "jarvis",
+      "category": "orchestration",
+      "description": "Break a user's goal into a small DAG of sub-tasks for the JarvisVR specialist team, then emit it as an orchestration.plan. Use whenever a request needs more than one capability or agent, e.g. \"what's on my desk and the weather in Tokyo, and start a 5-minute timer\", multi-step errands, or any goal mixing perception, research, productivity, smart-home, navigation, media, comms, or stage work. Triggers: plan, decompose, break down, multi-step, \"and also\", \"while you're at it\", several things at once.",
+      "path": "orchestration/task-decomposition"
+    },
+    {
+      "name": "describe-surroundings",
+      "agent": "perception-agent",
+      "category": "perception",
+      "description": "Describe the user's surroundings from the passthrough camera — the main objects and layout of the space — and label a few of them in place. Use for \"what's around me?\", \"describe this room\", \"what's on my desk?\", scene overviews, or accessibility narration. Triggers: describe, what's around me, what's here, look around, what's on the desk, scan the room.",
+      "path": "perception/describe-surroundings"
+    },
+    {
+      "name": "identify-object",
+      "agent": "perception-agent",
+      "category": "perception",
+      "description": "Identify a real-world object the user is looking at or pointing to, using the latest passthrough vision frame and gaze, then label it in place. Use for \"what is this?\", \"what am I holding?\", naming an object on a surface, or labeling a single thing in the room. Triggers: what is this, what's that, identify, name this, what am I holding, this thing.",
+      "path": "perception/identify-object"
+    },
+    {
+      "name": "locate-remembered-object",
+      "agent": "perception-agent",
+      "category": "perception",
+      "description": "Remember where an object is, and later recall its last-seen location with a marker and a navigation arrow. Use for \"remember where my keys are\", \"where did I leave my phone?\", \"where are my glasses?\", or pinning a spot for later. Triggers: where did I leave, where are my, remember where, find my, last seen, mark this spot.",
+      "path": "perception/locate-remembered-object"
+    },
+    {
+      "name": "read-and-translate-sign",
+      "agent": "perception-agent",
+      "category": "perception",
+      "description": "Read text visible in the passthrough camera (a sign, menu, label, or document) and optionally translate it into the user's language. Use for \"read this\", \"what does this say\", \"translate this sign/menu\", or OCR of something in view. Triggers: read this, what does this say, translate this sign, menu, label, OCR, foreign text.",
+      "path": "perception/read-and-translate-sign"
+    },
+    {
+      "name": "market-briefing",
+      "agent": "research-agent",
+      "category": "research",
+      "description": "Give a quick markets briefing — quotes for a watchlist and an optional trend chart. Use for \"how are my stocks?\", \"price of AAPL\", \"market briefing\", or a morning summary's finance section. Triggers: stocks, markets, ticker, quote, price of, my watchlist, how's the market, portfolio, finance briefing.",
+      "path": "research/market-briefing"
+    },
+    {
+      "name": "news-digest",
+      "agent": "research-agent",
+      "category": "research",
+      "description": "Pull current headlines (optionally about a topic) and present a scrollable news feed with short summaries. Use for \"what's the news?\", \"headlines about AI\", \"catch me up on…\", or a morning briefing's news section. Triggers: news, headlines, what's happening, catch me up, latest on, current events, briefing.",
+      "path": "research/news-digest"
+    },
+    {
+      "name": "summarize-source",
+      "agent": "research-agent",
+      "category": "research",
+      "description": "Condense a single source — a URL, article, document, or pasted text — into key points the user can read at a glance. Use for \"summarize this\", \"TL;DR\", \"give me the key points\", or as a summarizer sub-agent merging one of several sources. Triggers: summarize, tldr, key points, gist, condense, brief me on this, what's the takeaway.",
+      "path": "research/summarize-source"
+    },
+    {
+      "name": "web-research",
+      "agent": "research-agent",
+      "category": "research",
+      "description": "Look something up on the web and present a sourced answer, optionally opening the top result in a spatial browser. Use for factual questions, definitions, how-to lookups, comparisons, and \"search for…/look up…/find information on…\". Triggers: search, look up, find info, what is, who is, how do I, research, google, current weather/facts.",
+      "path": "research/web-research"
+    },
+    {
+      "name": "capture-note",
+      "agent": "productivity-agent",
+      "category": "productivity",
+      "description": "Quickly capture a note to long-term memory and show it back, or pin a sticky note in space. Use for \"note that…\", \"take a note\", \"remember that…\", \"what are my notes?\", or jotting an idea hands-free. Triggers: note, take a note, jot down, remember that, save this, my notes, sticky note.",
+      "path": "productivity/capture-note"
+    },
+    {
+      "name": "manage-calendar",
+      "agent": "productivity-agent",
+      "category": "productivity",
+      "description": "Show the user's schedule and answer agenda questions — today's events, what's next, free time. Use for \"what's on my calendar?\", \"what's my next meeting?\", \"am I free at 3?\", or a daily briefing's agenda section. Triggers: calendar, agenda, schedule, my day, next meeting, what's next, am I free, events today.",
+      "path": "productivity/manage-calendar"
+    },
+    {
+      "name": "manage-tasks",
+      "agent": "productivity-agent",
+      "category": "productivity",
+      "description": "Maintain a checkable to-do list — add, complete, reprioritize, and review tasks — as an interactive hologram. Use for \"add a task\", \"what's on my list?\", \"mark X done\", \"show my to-dos\", or planning the day. Triggers: task, to-do, todo, add to my list, mark done, check off, my tasks, what's left.",
+      "path": "productivity/manage-tasks"
+    },
+    {
+      "name": "manage-timers",
+      "agent": "productivity-agent",
+      "category": "productivity",
+      "description": "Start, stop, and run countdown timers and Pomodoro focus sessions, and react to the user's timer controls. Use for \"set a 5-minute timer\", \"cancel the timer\", \"start a pomodoro\", egg timers, focus sessions, and pause/resume/reset taps. Triggers: timer, countdown, set a timer, cancel timer, pomodoro, focus session, remind me in N minutes (short).",
+      "path": "productivity/manage-timers"
+    },
+    {
+      "name": "set-reminders",
+      "agent": "productivity-agent",
+      "category": "productivity",
+      "description": "Set time- or context-based reminders and surface them when due. Use for \"remind me to…\", \"at 6pm remind me…\", \"in 20 minutes remind me…\", or \"when I get home, remind me…\". Triggers: remind me, reminder, don't let me forget, at <time>, in <duration>, when I <context>.",
+      "path": "productivity/set-reminders"
+    },
+    {
+      "name": "control-lighting",
+      "agent": "smart-home-agent",
+      "category": "smart-home",
+      "description": "Control smart lights — on/off, brightness, and grouping by room — via a smart home panel. Use for \"turn on the lights\", \"dim the living room to 30%\", \"lights off\", or \"warm up the bedroom lights\". Triggers: lights, lamp, brightness, dim, brighten, turn on/off lights, set lights to.",
+      "path": "smart-home/control-lighting"
+    },
+    {
+      "name": "manage-climate",
+      "agent": "smart-home-agent",
+      "category": "smart-home",
+      "description": "Adjust thermostats and climate — set temperature, raise/lower, and manage blinds for passive cooling — via a smart home panel. Use for \"set it to 21\", \"make it warmer\", \"what's the thermostat at?\", or \"close the blinds\". Triggers: temperature, thermostat, heating, cooling, AC, warmer, cooler, degrees, blinds, shades.",
+      "path": "smart-home/manage-climate"
+    },
+    {
+      "name": "run-home-scene",
+      "agent": "smart-home-agent",
+      "category": "smart-home",
+      "description": "Apply a named multi-device scene that sets several devices at once (lights, climate, blinds, locks) to a mood or routine. Use for \"movie night\", \"good morning\", \"I'm leaving\", \"bedtime\", or any one-word routine that should change the whole room. Triggers: scene, movie night, good morning, bedtime, I'm leaving, focus mode, party, routine, set the mood.",
+      "path": "smart-home/run-home-scene"
+    },
+    {
+      "name": "secure-home",
+      "agent": "smart-home-agent",
+      "category": "smart-home",
+      "description": "Check and control home security — locks, cameras, and sensors — with explicit confirmation for anything that reduces security. Use for \"lock the front door\", \"is the door locked?\", \"show the front camera\", or \"arm the house\". Triggers: lock, unlock, door, security, camera, sensor, arm, disarm, is it locked.",
+      "path": "smart-home/secure-home"
+    },
+    {
+      "name": "measure-space",
+      "agent": "navigation-agent",
+      "category": "navigation",
+      "description": "Measure real-world distances, spans, areas, or angles between points in the room and show a measuring tape. Use for \"how far is that?\", \"how wide is this desk?\", \"measure the wall\", or \"what's the distance between these?\". Triggers: measure, how far, how wide, how tall, distance between, dimensions, span, area.",
+      "path": "navigation/measure-space"
+    },
+    {
+      "name": "remember-location",
+      "agent": "navigation-agent",
+      "category": "navigation",
+      "description": "Save a named place (parking spot, hotel, \"home\", a room) and recall or navigate back to it later. Use for \"remember where I parked\", \"save this as home\", \"take me back to my seat\", or pinning a spot to return to. Triggers: remember where I parked, save this place, mark this spot, where did I park, take me back, saved places.",
+      "path": "navigation/remember-location"
+    },
+    {
+      "name": "show-map",
+      "agent": "navigation-agent",
+      "category": "navigation",
+      "description": "Show an interactive 3D map centered on a place, with markers, or a volumetric globe for world-scale views. Use for \"show me a map of…\", \"where is…?\", \"put Tokyo on a map\", or plotting multiple locations. Triggers: map, show me where, on a map, location of, globe, plot these places, where is.",
+      "path": "navigation/show-map"
+    },
+    {
+      "name": "wayfind",
+      "agent": "navigation-agent",
+      "category": "navigation",
+      "description": "Give wayfinding directions to a destination and show a navigation arrow with distance and ETA. Use for \"take me to…\", \"how do I get to…?\", \"directions to the kitchen\", or guiding to a saved place or calendar event location. Triggers: take me to, directions, how do I get to, navigate to, guide me, which way to, route to.",
+      "path": "navigation/wayfind"
+    },
+    {
+      "name": "control-media-playback",
+      "agent": "media-agent",
+      "category": "media",
+      "description": "Play, pause, seek, and adjust audio or video, and react to transport controls. Use for \"play some music\", \"pause\", \"skip ahead 30 seconds\", \"turn it up\", or \"play that video\". Triggers: play, pause, resume, stop, skip, seek, rewind, volume, louder, quieter, next track, music, video.",
+      "path": "media/control-media-playback"
+    },
+    {
+      "name": "create-image",
+      "agent": "media-agent",
+      "category": "media",
+      "description": "Generate images from a text prompt and display them with prompt, status, and progress. Use for \"make an image of…\", \"generate a picture of…\", \"imagine…\", or visualizing a concept/mood. Triggers: generate image, make a picture, draw, imagine, create art, render an image, AI image, visualize this.",
+      "path": "media/create-image"
+    },
+    {
+      "name": "set-soundscape",
+      "agent": "media-agent",
+      "category": "media",
+      "description": "Play looping ambient soundscapes for focus, relaxation, or sleep — rain, café, forest, white noise — with an optional audio-reactive visualizer. Use for \"play some rain sounds\", \"café ambience\", \"white noise to focus\", or \"ocean waves to sleep\". Triggers: ambience, soundscape, background sounds, rain sounds, white noise, focus sounds, calm, nature sounds.",
+      "path": "media/set-soundscape"
+    },
+    {
+      "name": "caption-conversation",
+      "agent": "communication-agent",
+      "category": "communication",
+      "description": "Show live, rolling captions of speech Jarvis hears — for accessibility, noisy rooms, or meetings — with optional translation. Use for \"caption this\", \"turn on subtitles\", \"caption what they're saying\", or \"subtitle this meeting\". Triggers: caption, captions, subtitles, transcribe live, what are they saying, accessibility, hard of hearing, meeting transcript.",
+      "path": "communication/caption-conversation"
+    },
+    {
+      "name": "draft-message",
+      "agent": "communication-agent",
+      "category": "communication",
+      "description": "Draft a message, email, or reply in the user's voice and show it for review before anything is sent. Use for \"text Sarah that I'm running late\", \"draft an email to the team\", \"reply saying yes\", or composing a note to someone. Triggers: text, message, email, reply, draft, tell them, send a note, write to.",
+      "path": "communication/draft-message"
+    },
+    {
+      "name": "live-translate",
+      "agent": "communication-agent",
+      "category": "communication",
+      "description": "Translate a live two-way conversation between two languages in real time, showing both sides on a translator panel. Use for \"translate this conversation\", \"help me talk to them in Spanish\", or interpreting back-and-forth speech. Triggers: translate conversation, interpret, talk to them in, live translation, two-way translate, help me communicate.",
+      "path": "communication/live-translate"
+    },
+    {
+      "name": "annotate-reality",
+      "agent": "stage-agent",
+      "category": "stage",
+      "description": "Place world-anchored labels, callouts, pins, and boxes onto real objects and locations so information sticks to the physical world. Use for labeling things in the room, pinning a spot, boxing a detected object, or step-by-step \"point at the X\" guidance. Triggers: label this, pin here, mark that, point to, highlight, call out, annotate, put a label on.",
+      "path": "stage/annotate-reality"
+    },
+    {
+      "name": "compose-workspace",
+      "agent": "stage-agent",
+      "category": "stage",
+      "description": "Arrange multiple holograms into a comfortable spatial layout — anchor, space, and orient them so nothing overlaps or blocks the user. Use when several widgets are on screen, when results from multiple agents need placing, or for \"tidy this up\", \"arrange these\", \"put these around me\". Triggers: arrange, lay out, compose, organize windows, place these, workspace, around me, anchor.",
+      "path": "stage/compose-workspace"
+    },
+    {
+      "name": "declutter-space",
+      "agent": "stage-agent",
+      "category": "stage",
+      "description": "Tidy the user's space by closing, collapsing, or consolidating holograms that are stale, duplicated, or in the way. Use for \"clean this up\", \"close everything\", \"too much clutter\", \"hide these\", or auto-tidying before a new layout. Triggers: declutter, clean up, close all, hide, dismiss, too many windows, clear the space, minimize.",
+      "path": "stage/declutter-space"
+    },
+    {
+      "name": "present-data",
+      "agent": "stage-agent",
+      "category": "stage",
+      "description": "Choose the right visualization for a dataset and render it — table, chart, network graph, or globe — then place it well. Use when an agent has structured data to show, for \"chart this\", \"show it as a table\", \"graph these relationships\", or comparisons. Triggers: chart, graph, table, visualize, plot, compare, breakdown, show the data, trend.",
+      "path": "stage/present-data"
+    },
+    {
+      "name": "configure-llm",
+      "agent": "system-agent",
+      "category": "system",
+      "description": "View and change the active LLM provider, model, and API key, and hot-swap between providers from the in-headset settings. Use for \"switch to GPT-4o\", \"use a local model\", \"change the model\", \"set my API key\", or \"which model are you?\". Triggers: model, provider, LLM, switch model, API key, use local, ollama, openai, anthropic, change AI.",
+      "path": "system/configure-llm"
+    },
+    {
+      "name": "manage-privacy",
+      "agent": "system-agent",
+      "category": "system",
+      "description": "Control perception privacy — camera, microphone/ambient audio, and gaze — and show what's currently being captured. Use for \"stop watching\", \"turn off the camera\", \"stop listening\", \"are you recording?\", or \"what can you see/hear?\". Triggers: privacy, stop watching, turn off camera, stop listening, mute, mic off, are you recording, what can you see, disable perception.",
+      "path": "system/manage-privacy"
+    },
+    {
+      "name": "run-diagnostics",
+      "agent": "system-agent",
+      "category": "system",
+      "description": "Check JarvisVR's health — connection, perception streams, thermal/battery, active model, and available tools — and surface problems. Use for \"run diagnostics\", \"is everything working?\", \"why is it slow/laggy?\", \"check the connection\", or \"system status\". Triggers: diagnostics, status, health check, is it working, why is it slow, connection, battery, thermal, troubleshoot.",
+      "path": "system/run-diagnostics"
+    }
+  ]
+}

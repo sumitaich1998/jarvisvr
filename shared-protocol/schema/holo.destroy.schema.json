@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/holo.destroy.schema.json",
+  "title": "holo.destroy payload",
+  "description": "PROTOCOL.md §5.9 — remove an object.",
+  "type": "object",
+  "required": ["object_id"],
+  "properties": {
+    "object_id": { "type": "string", "minLength": 1 },
+    "fade_ms": { "type": "integer", "minimum": 0 }
+  }
+}

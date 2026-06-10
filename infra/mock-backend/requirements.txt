@@ -1,0 +1,4 @@
+# Mock brain runtime deps. The shared protocol binding (jarvis-protocol) is
+# installed separately: editable from ../../shared-protocol/python for local
+# dev, or copied in by the Dockerfile.
+websockets>=12,<14

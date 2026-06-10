@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.author_agent.schema.json",
+  "title": "client.author_agent payload",
+  "description": "PROTOCOL.md §10.2 — create/update/delete an agent (role) from the headset. v1.3.",
+  "type": "object",
+  "required": ["op", "role"],
+  "properties": {
+    "op": { "type": "string", "enum": ["create", "update", "delete"] },
+    "role": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "name": { "type": "string" },
+    "persona": { "type": "string" },
+    "tools": { "type": "array", "items": { "type": "string" } },
+    "skills": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.settings_update.schema.json",
+  "title": "client.settings_update payload",
+  "description": "PROTOCOL.md §5.15 — change settings (notably the LLM provider/model/API key). The api_key is sensitive: it travels ONLY on this client→server message and is never echoed back.",
+  "type": "object",
+  "properties": {
+    "llm": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "description": "Supported provider id (see server.settings.llm.providers[].id).",
+          "type": "string"
+        },
+        "model": { "type": "string" },
+        "base_url": {
+          "description": "OpenAI-compatible / local / custom base URL; null to clear.",
+          "type": ["string", "null"]
+        },
+        "api_key": {
+          "description": "OPTIONAL — send only to set/replace the key; omit to keep the existing one.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

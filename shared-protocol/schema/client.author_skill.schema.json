@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.author_skill.schema.json",
+  "title": "client.author_skill payload",
+  "description": "PROTOCOL.md §10.2 — create/update/delete a Skill from the headset. v1.3.",
+  "type": "object",
+  "required": ["op", "name"],
+  "properties": {
+    "op": { "type": "string", "enum": ["create", "update", "delete"] },
+    "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "category": { "type": "string" },
+    "agent": { "type": "string" },
+    "description": { "type": "string" },
+    "body": { "type": "string" },
+    "allowed_tools": { "type": "array", "items": { "type": "string" } },
+    "license": { "type": "string" },
+    "compatibility": { "type": "string" }
+  }
+}

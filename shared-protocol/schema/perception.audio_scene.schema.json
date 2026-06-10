@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/perception.audio_scene.schema.json",
+  "title": "perception.audio_scene payload",
+  "description": "PROTOCOL.md §8.4 — ambient audio understanding (overheard speech, soundscape).",
+  "type": "object",
+  "properties": {
+    "ambient_transcript": { "type": "string" },
+    "speaker": { "type": "string", "enum": ["user", "other", "unknown"] },
+    "sounds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "loudness_db": { "type": "number" },
+    "window_ms": { "type": "integer", "minimum": 0 }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "JarvisVR",
+  "rootNamespace": "JarvisVR",
+  "references": [
+    "JarvisVR.Protocol",
+    "NativeWebSocket",
+    "Unity.TextMeshPro"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "Newtonsoft.Json.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.inputsystem",
+      "expression": "",
+      "define": "HAS_INPUT_SYSTEM"
+    }
+  ],
+  "noEngineReferences": false
+}

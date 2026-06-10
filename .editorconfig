@@ -1,0 +1,40 @@
+# EditorConfig — https://editorconfig.org
+# Top-most EditorConfig file for the JarvisVR monorepo.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Python (agent-backend, voice-service, holo-tools, shared-protocol/python, infra)
+[*.py]
+indent_size = 4
+max_line_length = 100
+
+# C# (unity-client, shared-protocol/csharp)
+[*.cs]
+indent_size = 4
+
+# Web / config
+[*.{js,ts,tsx,json,jsonc,yml,yaml,css,html}]
+indent_size = 2
+
+# Markdown — keep trailing whitespace (it can be a hard line break)
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefiles require real tabs
+[{Makefile,makefile,*.mk}]
+indent_style = tab
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+
+# Don't reformat vendored / generated artifacts
+[*.{lock,svg}]
+insert_final_newline = false

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/common.schema.json",
+  "title": "JarvisVR shared definitions",
+  "description": "Reusable $defs referenced by the per-message JarvisVR protocol schemas (v1.1.0).",
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "vec3": {
+      "description": "Right-handed meters, Unity convention (Y up).",
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "quat": {
+      "description": "Quaternion [x, y, z, w].",
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "bbox": {
+      "description": "2D image bounding box [x, y, width, height] in pixels.",
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "anchor": {
+      "type": "string",
+      "enum": ["world", "head", "hand_left", "hand_right", "surface"]
+    },
+    "interaction": {
+      "type": "string",
+      "enum": ["tap", "grab", "release", "drag", "slider", "toggle", "resize", "dwell"]
+    },
+    "pose": {
+      "description": "A position + orientation in world space.",
+      "type": "object",
+      "properties": {
+        "position": { "$ref": "common.schema.json#/$defs/vec3" },
+        "rotation": { "$ref": "common.schema.json#/$defs/quat" }
+      }
+    },
+    "camera": {
+      "description": "Passthrough RGB camera id (v1.1).",
+      "type": "string",
+      "enum": ["rgb_left", "rgb_right", "rgb_center"]
+    },
+    "vision_format": {
+      "type": "string",
+      "enum": ["jpeg", "png", "rgb24"]
+    },
+    "perception_stream": {
+      "type": "string",
+      "enum": ["vision", "ambient_audio", "gaze", "scene_objects"]
+    },
+    "thermal": {
+      "type": "string",
+      "enum": ["nominal", "fair", "serious", "critical"]
+    },
+    "transform": {
+      "description": "Spatial transform. Partial by default; holo_object requires the core fields.",
+      "type": "object",
+      "properties": {
+        "anchor": { "$ref": "common.schema.json#/$defs/anchor" },
+        "position": { "$ref": "common.schema.json#/$defs/vec3" },
+        "rotation": { "$ref": "common.schema.json#/$defs/quat" },
+        "scale": { "$ref": "common.schema.json#/$defs/vec3" },
+        "billboard": { "type": "boolean" }
+      }
+    },
+    "text_input": {
+      "description": "Shape shared by user.text / user.voice_transcript / user.voice_partial / agent.transcript.",
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "attach_perception": {
+          "description": "v1.1: include current sight/sound buffer in the turn (default true while vision active).",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

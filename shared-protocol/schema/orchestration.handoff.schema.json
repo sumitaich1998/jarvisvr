@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/orchestration.handoff.schema.json",
+  "title": "orchestration.handoff payload",
+  "description": "PROTOCOL.md §9.2 — a delegation from one agent to another (or to a sub-agent). v1.2, additive.",
+  "type": "object",
+  "required": ["plan_id", "from_agent", "to_agent", "to_role"],
+  "properties": {
+    "plan_id": { "type": "string", "minLength": 1 },
+    "from_agent": { "type": "string", "minLength": 1 },
+    "to_agent": {
+      "description": "Sub-agents use dotted ids (a1.1) by convention.",
+      "type": "string",
+      "minLength": 1
+    },
+    "to_role": { "type": "string", "minLength": 1 },
+    "level": { "type": "integer", "minimum": 0 },
+    "subtask": { "type": "string" },
+    "reason": { "type": "string" }
+  }
+}

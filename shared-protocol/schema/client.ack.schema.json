@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.ack.schema.json",
+  "title": "client.ack payload",
+  "description": "PROTOCOL.md §4.1 — acknowledge a render command (envelope.reply_to = cmd id). Payload is {}.",
+  "type": "object"
+}

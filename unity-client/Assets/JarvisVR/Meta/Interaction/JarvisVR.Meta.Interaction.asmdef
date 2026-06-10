@@ -1,0 +1,26 @@
+{
+  "name": "JarvisVR.Meta.Interaction",
+  "rootNamespace": "JarvisVR.Meta",
+  "references": [
+    "JarvisVR",
+    "Oculus.Interaction",
+    "Oculus.Interaction.OVR"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "HAS_META_INTERACTION"
+  ],
+  "versionDefines": [
+    {
+      "name": "com.meta.xr.sdk.interaction",
+      "expression": "",
+      "define": "HAS_META_INTERACTION"
+    }
+  ],
+  "noEngineReferences": false
+}

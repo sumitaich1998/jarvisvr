@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/error.schema.json",
+  "title": "error payload",
+  "description": "PROTOCOL.md §5.13 — shape shared by server.error and client.error.",
+  "type": "object",
+  "required": ["code", "message"],
+  "properties": {
+    "code": {
+      "description": "Suggested: bad_envelope, unsupported_version, unknown_type, unknown_widget, invalid_props, tool_failed, internal.",
+      "type": "string",
+      "minLength": 1
+    },
+    "message": { "type": "string" },
+    "fatal": { "type": "boolean" }
+  }
+}

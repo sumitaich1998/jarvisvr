@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/agent.observation.schema.json",
+  "title": "agent.observation payload",
+  "description": "PROTOCOL.md §8.4 — what Jarvis perceives, with optional spatial annotations.",
+  "type": "object",
+  "required": ["text"],
+  "properties": {
+    "text": { "type": "string" },
+    "final": { "type": "boolean" },
+    "annotations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "object_id": { "type": "string" },
+          "position": { "$ref": "common.schema.json#/$defs/vec3" },
+          "anchor": { "$ref": "common.schema.json#/$defs/anchor" }
+        }
+      }
+    }
+  }
+}

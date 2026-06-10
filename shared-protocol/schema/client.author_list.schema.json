@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.author_list.schema.json",
+  "title": "client.author_list payload",
+  "description": "PROTOCOL.md §10.2 — request the authorable agents & skills catalog. v1.3.",
+  "type": "object",
+  "properties": {}
+}

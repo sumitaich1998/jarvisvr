@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvisvr.dev/schema/client.scene.schema.json",
+  "title": "client.scene payload",
+  "description": "PROTOCOL.md §5.12 — spatial scene update (anchors, surfaces, head pose).",
+  "type": "object",
+  "properties": {
+    "head": {
+      "type": "object",
+      "properties": {
+        "position": { "$ref": "common.schema.json#/$defs/vec3" },
+        "rotation": { "$ref": "common.schema.json#/$defs/quat" }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "center": { "$ref": "common.schema.json#/$defs/vec3" },
+          "normal": { "$ref": "common.schema.json#/$defs/vec3" }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "position": { "$ref": "common.schema.json#/$defs/vec3" },
+          "rotation": { "$ref": "common.schema.json#/$defs/quat" }
+        }
+      }
+    }
+  }
+}

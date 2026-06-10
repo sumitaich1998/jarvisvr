@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/sumitaich1998/jarvisvr/discussions
+    about: Questions, ideas, and show & tell — start here if it's not a bug or a concrete feature request.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/sumitaich1998/jarvisvr/security/advisories/new
+    about: Please report vulnerabilities privately (see SECURITY.md), not as public issues.

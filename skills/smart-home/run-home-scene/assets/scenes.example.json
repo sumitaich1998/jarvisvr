@@ -1,0 +1,49 @@
+{
+  "$comment": "Starter smart-home scenes for the run-home-scene skill. Each scene's device target states conform to the holo-tools smart_home_panel device.state schema (on, level 0-100, temperature_c, locked). Clone and adapt per home; device ids must match the user's actual devices.",
+  "version": "1.0",
+  "scenes": [
+    {
+      "id": "good_morning",
+      "name": "Good Morning",
+      "description": "Ease into the day: warm lights up, blinds open, comfortable temperature.",
+      "devices": [
+        { "id": "light_1", "type": "light", "state": { "on": true, "level": 70 } },
+        { "id": "blind_1", "type": "blind", "state": { "level": 100 } },
+        { "id": "thermo_1", "type": "thermostat", "state": { "on": true, "temperature_c": 21.5 } }
+      ]
+    },
+    {
+      "id": "movie_night",
+      "name": "Movie Night",
+      "description": "Cinema mood: lights low, blinds closed, cozy temperature.",
+      "devices": [
+        { "id": "light_1", "type": "light", "state": { "on": true, "level": 15 } },
+        { "id": "blind_1", "type": "blind", "state": { "level": 0 } },
+        { "id": "thermo_1", "type": "thermostat", "state": { "on": true, "temperature_c": 21 } }
+      ]
+    },
+    {
+      "id": "leaving",
+      "name": "I'm Leaving",
+      "description": "Secure + save energy. Increase-security steps apply directly; never auto-unlocks.",
+      "requires_confirmation": false,
+      "devices": [
+        { "id": "light_1", "type": "light", "state": { "on": false, "level": 0 } },
+        { "id": "thermo_1", "type": "thermostat", "state": { "on": false } },
+        { "id": "lock_1", "type": "lock", "state": { "locked": true } },
+        { "id": "sensor_1", "type": "sensor", "state": { "on": true } }
+      ]
+    },
+    {
+      "id": "bedtime",
+      "name": "Bedtime",
+      "description": "Wind down: lights off, blinds closed, cooler room, doors locked.",
+      "devices": [
+        { "id": "light_1", "type": "light", "state": { "on": false, "level": 0 } },
+        { "id": "blind_1", "type": "blind", "state": { "level": 0 } },
+        { "id": "thermo_1", "type": "thermostat", "state": { "on": true, "temperature_c": 19 } },
+        { "id": "lock_1", "type": "lock", "state": { "locked": true } }
+      ]
+    }
+  ]
+}

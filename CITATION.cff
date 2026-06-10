@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use JarvisVR in your research or projects, please cite it."
+title: "JarvisVR — an AI agentic operating system for mixed reality on the Meta Quest 3"
+abstract: >-
+  JarvisVR is an open-source AI agentic operating system for mixed reality on the
+  Meta Quest 3. A planning LLM agent perceives the user's real environment
+  (color passthrough vision, ambient audio, and gaze), calls tools, and renders
+  interactive 3D holographic widgets the user manipulates with their hands, all
+  over a single versioned WebSocket protocol.
+type: software
+authors:
+  - name: "The JarvisVR contributors"
+version: "0.1.0"
+date-released: "2026-06-08"
+license: MIT
+repository-code: "https://github.com/sumitaich1998/jarvisvr"
+url: "https://github.com/sumitaich1998/jarvisvr"
+keywords:
+  - mixed-reality
+  - meta-quest-3
+  - ai-agent
+  - llm
+  - unity
+  - openxr
+  - jarvis
+  - voice-assistant
+  - multimodal
+  - holographic-ui

@@ -55,6 +55,7 @@ unity-client/[Rr]ecordings/
 Thumbs.db
 .idea/
 .vs/
+.cursor/
 *.swp
 *~
 

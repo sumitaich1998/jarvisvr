@@ -58,6 +58,9 @@ include = ["jarvis_backend*"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "-ra"
+# Put the package root on sys.path so `from tests.conftest import …` works with
+# a bare `pytest` (as CI runs it), not only `python -m pytest`.
+pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["jarvis_backend"]
